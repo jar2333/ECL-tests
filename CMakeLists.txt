@@ -10,6 +10,10 @@ add_executable(main
   src/main.cpp
 )
 
+add_executable(defun
+  src/defun.cpp
+)
+
 set(IS_DEBUG_BUILD CMAKE_BUILD_TYPE MATCHES "^[Dd]ebug")
 
 # Indication to the code that this is a debug build
@@ -27,4 +31,10 @@ target_link_libraries(main
     #assummes an installation
         ecl
         dl
+)
+
+target_link_libraries(defun
+    PRIVATE
+    #assummes an installation
+        ecl
 )

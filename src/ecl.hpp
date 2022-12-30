@@ -1,6 +1,8 @@
 #ifndef ECL_HPP
 #define ECL_HPP
 
+#include "function_traits.hpp"
+
 #include <ecl/ecl.h>
 
 #include <string>
@@ -10,16 +12,16 @@
 
 #define DEFUN(name, fun) ECL::defun(#name, fun)
 
-namespace ECL {
-
-    template <typename T> 
-    void defun(const std::string &name, T fun) { //add constraints to check if lambda
-        defun(name, +fun);
-    }
+namespace ecl {
 
     template <std::same_as<cl_object>... Args>
     void defun(const std::string &name, cl_object(*fun)(Args... args)) {
         ecl_def_c_function(c_string_to_object(name.c_str()), (cl_objectfn_fixed)fun, sizeof...(Args));
+    }
+
+    template <typename T>
+    void defun(const std::string &name, T fun) { //add constraints to check if lambda
+        defun(name, lambda_to_func_ptr(fun));
     }
 
     // Run arbitrary Lisp expressions
@@ -47,9 +49,6 @@ namespace ECL {
         // Bootstrap
         cl_boot(argc, argv);
         atexit(cl_shutdown);
-
-        // Run initrc script
-        eval("(load \"initrc.lisp\")");
     }
 
     void shutdown() {

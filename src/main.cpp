@@ -52,10 +52,10 @@ void runDynamic() {
 }
 
 void runLoaded() {
-    ECL::eval("(load \"src/scripts/fibonacci.fas\")");
+    ecl::eval("(load \"src/scripts/fibonacci.fas\")");
 
     runTest([](int v) -> int {
-        return ecl_to_int(ECL::eval("(fib "+std::to_string(v)+')'));
+        return ecl_to_int(ecl::eval("(fib "+std::to_string(v)+')'));
     });
     
 
@@ -63,11 +63,11 @@ void runLoaded() {
 
 int main(int argc, char* argv[]) {
     // Bootstrap Lisp
-    ECL::initialize(argc, argv);
+    ecl::initialize(argc, argv);
 
     runDynamic();
     runLoaded();
 
-    ECL::shutdown();
+    ecl::shutdown();
     return EXIT_SUCCESS;
 }
